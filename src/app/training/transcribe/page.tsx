@@ -98,7 +98,7 @@ export default function TranscribePage() {
       <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col">
         <header className="bg-white py-4 px-4 shadow-lg">
           <div className="max-w-4xl mx-auto flex items-center gap-4">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">
+            <Link href="/" className="text-gray-500 hover:text-gray-700 flex-shrink-0">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
@@ -106,7 +106,7 @@ export default function TranscribePage() {
             <img
               src="/tirvigil_header.png"
               alt="Tirvigil"
-              className="h-10 object-contain"
+              className="flex-1 object-contain max-h-16"
             />
           </div>
         </header>
@@ -134,9 +134,9 @@ export default function TranscribePage() {
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex flex-col">
       {/* Header */}
       <header className="bg-white py-4 px-4 shadow-lg">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-gray-500 hover:text-gray-700">
+        <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <Link href="/" className="text-gray-500 hover:text-gray-700 flex-shrink-0">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
@@ -144,21 +144,23 @@ export default function TranscribePage() {
             <img
               src="/tirvigil_header.png"
               alt="Tirvigil"
-              className="h-10 object-contain"
+              className="flex-1 object-contain max-h-16"
             />
-            <span className="text-gray-500 text-sm">
-              {currentIndex + 1} de {pendingPairs.length}
-            </span>
           </div>
-          <button
-            onClick={saveProgress}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-            </svg>
-            Guardar
-          </button>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <span className="text-gray-500 text-sm">
+              {currentIndex + 1}/{pendingPairs.length}
+            </span>
+            <button
+              onClick={saveProgress}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              </svg>
+              Guardar
+            </button>
+          </div>
         </div>
       </header>
 

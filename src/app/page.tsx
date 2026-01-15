@@ -18,11 +18,11 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
       <header className="bg-white py-4 px-4 shadow-lg">
-        <div className="max-w-4xl mx-auto flex justify-center">
+        <div className="max-w-4xl mx-auto">
           <img
             src="/tirvigil_header.png"
             alt="Tirvigil"
-            className="h-12 object-contain"
+            className="w-full object-contain"
           />
         </div>
       </header>
