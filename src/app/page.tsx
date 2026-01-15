@@ -17,12 +17,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <header className="bg-blue-800 text-white py-6 px-4 shadow-lg">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-bold">PathologyTranscriber</h1>
-          <p className="text-blue-200 text-sm mt-1">
-            Transcripcion inteligente de informes anatomopatologicos
-          </p>
+      <header className="bg-white py-4 px-4 shadow-lg">
+        <div className="max-w-4xl mx-auto flex justify-center">
+          <img
+            src="/tirvigil_header.png"
+            alt="Tirvigil"
+            className="h-12 object-contain"
+          />
         </div>
       </header>
 

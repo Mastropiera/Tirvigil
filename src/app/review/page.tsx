@@ -143,19 +143,18 @@ export default function ReviewPage() {
   // Vista de revision
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <header className="bg-blue-800 text-white py-4 px-4 shadow-lg">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-blue-200 hover:text-white">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </Link>
-            <div>
-              <h1 className="text-xl font-bold">Revisar Informe</h1>
-              <p className="text-blue-200 text-sm">Revisa y edita antes de exportar</p>
-            </div>
-          </div>
+      <header className="bg-white py-4 px-4 shadow-lg">
+        <div className="max-w-4xl mx-auto flex items-center gap-4">
+          <Link href="/" className="text-gray-500 hover:text-gray-700">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </Link>
+          <img
+            src="/tirvigil_header.png"
+            alt="Tirvigil"
+            className="h-10 object-contain"
+          />
         </div>
       </header>
 
