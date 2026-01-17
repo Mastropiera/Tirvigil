@@ -44,8 +44,24 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error en transcripcion:', error);
+
+    let errorMessage = 'Error al transcribir el audio';
+
+    if (error instanceof Error) {
+      errorMessage = error.message;
+
+      // Errores comunes de OpenAI
+      if (error.message.includes('API key')) {
+        errorMessage = 'API key de OpenAI invalida o no configurada';
+      } else if (error.message.includes('rate limit')) {
+        errorMessage = 'Limite de uso de API excedido. Intenta mas tarde.';
+      } else if (error.message.includes('file size')) {
+        errorMessage = 'El archivo es demasiado grande (max 25MB)';
+      }
+    }
+
     return NextResponse.json(
-      { error: 'Error al transcribir el audio' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
