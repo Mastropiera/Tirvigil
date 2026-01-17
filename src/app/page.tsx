@@ -22,7 +22,7 @@ export default function Home() {
           <img
             src="/tirvigil_header.png"
             alt="Tirvigil"
-            className="w-full object-contain"
+            className="w-full object-contain max-h-24"
           />
         </div>
       </header>

@@ -46,7 +46,7 @@ export default function RecordPage() {
           <img
             src="/tirvigil_header.png"
             alt="Tirvigil"
-            className="flex-1 object-contain max-h-16"
+            className="flex-1 object-contain max-h-24"
           />
         </div>
       </header>
