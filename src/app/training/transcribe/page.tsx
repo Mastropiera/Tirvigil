@@ -106,7 +106,7 @@ export default function TranscribePage() {
             <img
               src="/tirvigil_header.png"
               alt="Tirvigil"
-              className="flex-1 object-contain max-h-32"
+              className="flex-1 object-contain max-h-36"
             />
           </div>
         </header>
@@ -144,7 +144,7 @@ export default function TranscribePage() {
             <img
               src="/tirvigil_header.png"
               alt="Tirvigil"
-              className="flex-1 object-contain max-h-32"
+              className="flex-1 object-contain max-h-36"
             />
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
