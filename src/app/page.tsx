@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
-      <header className="bg-white py-6 px-4">
+      <header className="bg-white dark:bg-gray-900 pt-6 px-4">
         <div className="max-w-4xl mx-auto">
           <img
             src="/tirvigil_header.png"
