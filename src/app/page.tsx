@@ -36,28 +36,24 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link
               href="/record"
-              className="flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-xl p-8 shadow-lg transition-all hover:scale-[1.02]"
+              className="block hover:opacity-90 transition-opacity"
             >
-              <svg className="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
-              <span className="text-lg font-semibold">Grabar Dictado</span>
-              <span className="text-blue-200 text-sm mt-1 text-center">
-                Dicta tu informe en tiempo real
-              </span>
+              <img
+                src="/grabardictado.png"
+                alt="Grabar Dictado"
+                className="w-full rounded-xl"
+              />
             </Link>
 
             <Link
               href="/upload"
-              className="flex flex-col items-center justify-center bg-gradient-to-br from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white rounded-xl p-8 shadow-lg transition-all hover:scale-[1.02]"
+              className="block hover:opacity-90 transition-opacity"
             >
-              <svg className="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-              </svg>
-              <span className="text-lg font-semibold">Subir Audio</span>
-              <span className="text-purple-200 text-sm mt-1 text-center">
-                Sube un archivo de audio existente
-              </span>
+              <img
+                src="/subiraudio.png"
+                alt="Subir Audio"
+                className="w-full rounded-xl"
+              />
             </Link>
           </div>
         </section>
