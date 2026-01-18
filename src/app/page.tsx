@@ -9,20 +9,20 @@ export default function Home() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <div className="animate-pulse text-gray-500">Cargando...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <header className="bg-white py-4 px-4 shadow-lg">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <header className="bg-white py-6 px-4">
         <div className="max-w-4xl mx-auto">
           <img
             src="/tirvigil_header.png"
             alt="Tirvigil"
-            className="w-full object-contain max-h-24"
+            className="w-full object-contain max-h-32"
           />
         </div>
       </header>
