@@ -1,11 +1,26 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTrainingData } from '@/hooks/useTrainingData';
+
+interface ApiConfig {
+  configured: boolean;
+  openai: boolean;
+  anthropic: boolean;
+}
 
 export default function Home() {
   const { pairs, isLoaded, getStats } = useTrainingData();
   const stats = getStats();
+  const [apiConfig, setApiConfig] = useState<ApiConfig | null>(null);
+
+  useEffect(() => {
+    fetch('/api/config')
+      .then(res => res.json())
+      .then(data => setApiConfig(data))
+      .catch(() => setApiConfig({ configured: false, openai: false, anthropic: false }));
+  }, []);
 
   if (!isLoaded) {
     return (
@@ -154,22 +169,28 @@ export default function Home() {
           </section>
         )}
 
-        {/* Info de configuracion */}
-        <section className="mt-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
-          <h3 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2 flex items-center gap-2">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Configuracion requerida
-          </h3>
-          <p className="text-sm text-yellow-700 dark:text-yellow-300">
-            Para usar las funciones de transcripcion automatica, configura las variables de entorno:
-          </p>
-          <ul className="mt-2 text-sm text-yellow-600 dark:text-yellow-400 space-y-1">
-            <li><code className="bg-yellow-100 dark:bg-yellow-900/50 px-1 rounded">OPENAI_API_KEY</code> - Para Whisper (transcripcion)</li>
-            <li><code className="bg-yellow-100 dark:bg-yellow-900/50 px-1 rounded">ANTHROPIC_API_KEY</code> - Para Claude (procesamiento)</li>
-          </ul>
-        </section>
+        {/* Info de configuracion - solo mostrar si falta alguna API key */}
+        {apiConfig && !apiConfig.configured && (
+          <section className="mt-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
+            <h3 className="font-medium text-yellow-800 dark:text-yellow-200 mb-2 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Configuracion requerida
+            </h3>
+            <p className="text-sm text-yellow-700 dark:text-yellow-300">
+              Para usar las funciones de transcripcion automatica, configura las variables de entorno:
+            </p>
+            <ul className="mt-2 text-sm text-yellow-600 dark:text-yellow-400 space-y-1">
+              {!apiConfig.openai && (
+                <li><code className="bg-yellow-100 dark:bg-yellow-900/50 px-1 rounded">OPENAI_API_KEY</code> - Para Whisper (transcripcion)</li>
+              )}
+              {!apiConfig.anthropic && (
+                <li><code className="bg-yellow-100 dark:bg-yellow-900/50 px-1 rounded">ANTHROPIC_API_KEY</code> - Para Claude (procesamiento)</li>
+              )}
+            </ul>
+          </section>
+        )}
       </main>
 
       <footer className="text-center py-6 text-gray-500 dark:text-gray-400 text-sm">
