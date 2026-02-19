@@ -56,7 +56,7 @@ export default function Home() {
               <img
                 src="/grabardictado.png"
                 alt="Grabar Dictado"
-                className="w-full rounded-xl"
+                className="w-4/5 mx-auto rounded-xl"
               />
             </Link>
 
@@ -67,7 +67,7 @@ export default function Home() {
               <img
                 src="/subiraudio.png"
                 alt="Subir Audio"
-                className="w-full rounded-xl"
+                className="w-4/5 mx-auto rounded-xl"
               />
             </Link>
           </div>
