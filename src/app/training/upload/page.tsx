@@ -54,17 +54,21 @@ export default function UploadPage() {
       const file = files[i];
       const duration = await getAudioDuration(file);
 
-      // Convertir archivo a base64 para almacenar en localStorage
-      const base64 = await new Promise<string>((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result as string);
-        reader.readAsDataURL(file);
-      });
+      // Guardar el archivo en el servidor en lugar de base64
+      const formData = new FormData();
+      formData.append('audio', file);
+      const res = await fetch('/api/training/upload', { method: 'POST', body: formData });
+      if (!res.ok) {
+        console.error(`Error subiendo ${file.name}`);
+        setProgress(Math.round(((i + 1) / files.length) * 100));
+        continue;
+      }
+      const { url } = await res.json();
 
       const pair: TrainingPair = {
         id: `audio_${Date.now()}_${i}`,
         audioFileName: file.name,
-        audioUrl: base64,
+        audioUrl: url,
         audioDuration: duration,
         transcripcion: '',
         status: 'pendiente',

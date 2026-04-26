@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver';
 
 export default function ExportPage() {
   const { isLoaded, getStats, getCompletedPairs, clearCompleted } = useTrainingData();
-  const [exportFormat, setExportFormat] = useState<'json' | 'csv' | 'docx'>('json');
+  const [exportFormat, setExportFormat] = useState<'json' | 'csv' | 'docx' | 'jsonl'>('jsonl');
   const [isExporting, setIsExporting] = useState(false);
 
   const stats = getStats();
@@ -19,6 +19,7 @@ export default function ExportPage() {
       id: pair.id,
       audioFileName: pair.audioFileName,
       audioDuration: pair.audioDuration,
+      transcripcionWhisper: pair.transcripcionWhisper,
       transcripcion: pair.transcripcion,
       transcripcionCorregida: pair.transcripcionCorregida,
       notas: pair.notas,
@@ -27,6 +28,30 @@ export default function ExportPage() {
     }));
 
     return JSON.stringify(exportData, null, 2);
+  };
+
+  // Formato JSONL para fine-tuning de OpenAI (GPT)
+  const generateJSONL = () => {
+    const pairs = completedPairs.filter(
+      p => p.transcripcionWhisper && p.transcripcion && p.transcripcionWhisper !== p.transcripcion
+    );
+
+    return pairs.map(pair => JSON.stringify({
+      messages: [
+        {
+          role: 'system',
+          content: 'Eres un corrector de transcripciones de informes anatomopatológicos. Corrige los errores de reconocimiento de voz manteniendo el contenido médico exacto.',
+        },
+        {
+          role: 'user',
+          content: `Corrige esta transcripción:\n\n${pair.transcripcionWhisper}`,
+        },
+        {
+          role: 'assistant',
+          content: pair.transcripcion,
+        },
+      ],
+    })).join('\n');
   };
 
   const generateCSV = () => {
@@ -209,9 +234,23 @@ export default function ExportPage() {
       return;
     }
 
-    const content = exportFormat === 'json' ? generateJSON() : generateCSV();
-    const mimeType = exportFormat === 'json' ? 'application/json' : 'text/csv';
-    const extension = exportFormat;
+    let content: string;
+    let mimeType: string;
+    let extension: string;
+
+    if (exportFormat === 'jsonl') {
+      content = generateJSONL();
+      mimeType = 'application/jsonl';
+      extension = 'jsonl';
+    } else if (exportFormat === 'json') {
+      content = generateJSON();
+      mimeType = 'application/json';
+      extension = 'json';
+    } else {
+      content = generateCSV();
+      mimeType = 'text/csv';
+      extension = 'csv';
+    }
 
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
@@ -316,13 +355,24 @@ export default function ExportPage() {
                   <input
                     type="radio"
                     name="format"
+                    value="jsonl"
+                    checked={exportFormat === 'jsonl'}
+                    onChange={() => setExportFormat('jsonl')}
+                    className="w-4 h-4 text-blue-600"
+                  />
+                  <span className="text-gray-700 dark:text-gray-200">JSONL</span>
+                  <span className="text-xs text-green-600 dark:text-green-400 font-medium">(fine-tuning OpenAI)</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="format"
                     value="json"
                     checked={exportFormat === 'json'}
                     onChange={() => setExportFormat('json')}
                     className="w-4 h-4 text-blue-600"
                   />
                   <span className="text-gray-700 dark:text-gray-200">JSON</span>
-                  <span className="text-xs text-gray-500">(para ML)</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -367,6 +417,16 @@ export default function ExportPage() {
                       <li>Transcripcion corregida (si existe)</li>
                       <li>Notas (si existen)</li>
                     </ul>
+                  </div>
+                ) : exportFormat === 'jsonl' ? (
+                  <div className="text-sm text-gray-600 dark:text-gray-300">
+                    <p className="mb-3">
+                      Incluye <strong>{completedPairs.filter(p => p.transcripcionWhisper && p.transcripcion && p.transcripcionWhisper !== p.transcripcion).length}</strong> pares de corrección (Whisper → texto corregido).
+                    </p>
+                    <p className="mb-2 text-xs text-gray-400">Pares sin diferencias se omiten automáticamente.</p>
+                    <pre className="whitespace-pre-wrap font-mono text-xs">
+                      {generateJSONL().slice(0, 1500) + (generateJSONL().length > 1500 ? '\n...' : '')}
+                    </pre>
                   </div>
                 ) : (
                   <pre className="text-sm text-gray-600 dark:text-gray-300 whitespace-pre-wrap font-mono">

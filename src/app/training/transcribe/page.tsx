@@ -14,6 +14,7 @@ export default function TranscribePage() {
   const [transcripcion, setTranscripcion] = useState('');
   const [notas, setNotas] = useState('');
   const [showNotes, setShowNotes] = useState(false);
+  const [isAutoTranscribing, setIsAutoTranscribing] = useState(false);
 
   useEffect(() => {
     if (isLoaded) {
@@ -25,6 +26,39 @@ export default function TranscribePage() {
       }
     }
   }, [isLoaded, pairs, getPendingPairs]);
+
+  // Auto-transcribir con Whisper cuando cambia el audio activo
+  useEffect(() => {
+    const pair = pendingPairs[currentIndex];
+    if (!pair || pair.transcripcionWhisper) return;
+
+    const autoTranscribe = async () => {
+      setIsAutoTranscribing(true);
+      try {
+        const audioRes = await fetch(pair.audioUrl);
+        const audioBlob = await audioRes.blob();
+        const audioFile = new File([audioBlob], pair.audioFileName, { type: audioBlob.type || 'audio/mpeg' });
+
+        const formData = new FormData();
+        formData.append('audio', audioFile);
+        const res = await fetch('/api/transcribe', { method: 'POST', body: formData });
+        const data = await res.json();
+
+        if (data.text) {
+          updatePair(pair.id, { transcripcionWhisper: data.text });
+          // Pre-poblar el editor solo si aún está vacío
+          setTranscripcion(prev => prev || data.text);
+        }
+      } catch (error) {
+        console.error('Error al auto-transcribir:', error);
+      } finally {
+        setIsAutoTranscribing(false);
+      }
+    };
+
+    autoTranscribe();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, pendingPairs.length]);
 
   const currentPair = pendingPairs[currentIndex];
 
@@ -211,13 +245,29 @@ export default function TranscribePage() {
 
         {/* Editor de transcripcion */}
         <div className="flex-1 flex flex-col">
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-2">
-            Transcripcion
-          </label>
+          <div className="flex items-center gap-2 mb-2">
+            <label className="block text-gray-700 dark:text-gray-200 font-medium">
+              Transcripcion
+            </label>
+            {isAutoTranscribing && (
+              <span className="flex items-center gap-1 text-sm text-blue-500">
+                <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                </svg>
+                Transcribiendo con Whisper...
+              </span>
+            )}
+            {!isAutoTranscribing && currentPair?.transcripcionWhisper && (
+              <span className="text-xs text-green-500 dark:text-green-400">
+                Whisper listo — corrige si es necesario
+              </span>
+            )}
+          </div>
           <TranscriptEditor
             value={transcripcion}
             onChange={setTranscripcion}
-            placeholder="Escribe aqui la transcripcion del audio..."
+            placeholder={isAutoTranscribing ? 'Esperando transcripción de Whisper...' : 'Escribe aqui la transcripcion del audio...'}
             className="flex-1"
             autoFocus
           />

@@ -34,7 +34,8 @@ export interface TrainingPair {
   audioFileName: string;
   audioUrl: string;
   audioDuration: number; // en segundos
-  transcripcion: string;
+  transcripcionWhisper?: string; // transcripción original de Whisper (sin corregir)
+  transcripcion: string;         // transcripción corregida manualmente
   transcripcionCorregida?: string;
   notas?: string;
   status: 'pendiente' | 'en_progreso' | 'completado' | 'revisado';
